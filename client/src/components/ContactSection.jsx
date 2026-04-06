@@ -13,7 +13,7 @@ import {
   MessageCircle,
   Zap,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 // ── EmailJS config ─────────────────────────────────────────────────
 const EMAILJS_SERVICE_ID  = "service_b70fq7o";
@@ -56,7 +56,6 @@ const socials = [
 ];
 
 export const ContactSection = () => {
-  const formRef = useRef(null);
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [formData, setFormData] = useState({ name: "", email: "", title: "", message: "" });
 
@@ -70,16 +69,23 @@ export const ContactSection = () => {
 
     setStatus("loading");
     try {
-      await emailjs.sendForm(
+      await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
-        formRef.current,
+        {
+          name: formData.name,
+          email: formData.email,
+          title: formData.title || "No Subject",
+          message: formData.message,
+          time: new Date().toLocaleString("en-PK", { dateStyle: "medium", timeStyle: "short" }),
+        },
         EMAILJS_PUBLIC_KEY
       );
       setStatus("success");
       setFormData({ name: "", email: "", title: "", message: "" });
       setTimeout(() => setStatus("idle"), 4000);
-    } catch {
+    } catch (err) {
+      console.error("EmailJS error:", err);
       setStatus("error");
       setTimeout(() => setStatus("idle"), 4000);
     }
