@@ -1,624 +1,369 @@
-import { ArrowRight, ExternalLink, Github, ChevronUp, Star, Code, ChevronDown, MoveRight, Filter, Sparkles, Award, Zap, Play, Eye, Calendar, Users, X } from "lucide-react";
-import { useState, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { Github, ExternalLink, Sparkles, X, ArrowUpRight } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
+/* ── Project data ──────────────────────────────────────────────── */
 const projects = [
   {
-    id: 8,
-    title: "GenAxis",
-    category: "AI SaaS ",
-    description: "AI saas webapp build with PERN stack and Intigrated Gemini . OPEN SOURCE ",
-    image: "/projects/project8.png",
-    video: "/projects/videos/genaxix-demo.mp4",
-    tags: ["PERN Stack", "Clerk Auth", "Google Gemini", "Clerk Billing", "OPEN SOURCE"],
-    demoUrl: "https://genaxis.vercel.app",
-    githubUrl: "https://github.com/Sahilmd01/genaxis",
-    featured: true,
-    accentColor: "from-emerald-500 to-teal-600",
-    status: "Live",
-    highlights: ["Image Generation", "Article writer", "Blog Writter","Resume Reviewer"]
+    id: 1, wide: true,
+    title: "BetEver B2B",
+    category: "Gambling / Games",
+    desc: "Enterprise-grade B2B sports betting platform with real-time odds engine, multi-market support, agent management, and advanced risk controls built for bookmakers.",
+    image: "/projects/betever.png",
+    tags: ["Angular", "Tailwind CSS", "TypeScript", "RxJS"],
+    githubUrl: "https://github.com/Aoun-Javaid/beteverb2b",
+    color: "from-red-600 to-rose-700",
+    glow: "rgba(239,68,68,0.3)",
   },
   {
-    id: 7,
-    title: "NauraCare",
-    category: "Healthcare SaaS",
-    description: "Hospital management platform with multi-role access, patient tracking, and billing systems.",
-    image: "/projects/project7.png",
-    video: "/projects/videos/nauracare-demo.mp4",
-    tags: ["React", "Node.js", "MongoDB", "Stripe", "JWT Auth"],
-    demoUrl: "https://nauracare.vercel.app",
-    githubUrl: "https://github.com/Sahilmd01/neuracare",
-    featured: true,
-    accentColor: "from-emerald-500 to-teal-600",
-    status: "Live",
-    highlights: ["Multi-role system", "Patient management", "Payment integration"]
+    id: 2, wide: false,
+    title: "D247 — B2B Gambling",
+    category: "Gambling / Games",
+    desc: "White-label gambling solution with live casino, sportsbook, and slots. Full back-office admin and reporting suite for operators.",
+    image: "/projects/d247.png",
+    tags: ["Angular", "Tailwind CSS", "TypeScript", "NgRx"],
+    githubUrl: "https://github.com/connectwithfalco/d247-web-ag-b2b",
+    color: "from-rose-600 to-pink-700",
+    glow: "rgba(244,63,94,0.3)",
   },
   {
-    id: 1,
-    title: "Vante & Co.",
-    category: "E-commerce",
-    description: "Fashion marketplace with product recommendations and seamless checkout experience.",
-    image: "/projects/project1.png",
-    video: "/projects/videos/vante-demo.mp4",
-    tags: ["React", "Node.js", "Stripe", "Redis"],
-    demoUrl: "https://e-commerce-website-4w6a.vercel.app",
-    githubUrl: "https://github.com/Sahilmd01/E-commerce-website",
-    featured: true,
-    accentColor: "from-purple-500 to-indigo-600",
-    status: "Live",
-    highlights: ["Product catalog", "Shopping cart", "Payment processing"]
+    id: 3, wide: false,
+    title: "Tiger Exchange",
+    category: "Gambling / Games",
+    desc: "High-traffic sports exchange platform with live in-play betting, real-time P&L tracking, and multi-currency wallet system.",
+    image: "/projects/tigerexch.png",
+    tags: ["Angular", "Tailwind CSS", "TypeScript", "Socket.IO"],
+    githubUrl: null,
+    color: "from-orange-600 to-amber-700",
+    glow: "rgba(234,88,12,0.3)",
   },
   {
-    id: 2,
-    title: "Converse Pro",
-    category: "Real-time Communication",
-    description: "Chat platform with real-time messaging, media sharing, and user authentication.",
-    image: "/projects/project2.png",
-    video: "/projects/videos/converse-demo.mp4",
-    tags: ["Socket.IO", "MongoDB", "React", "WebRTC"],
-    demoUrl: "https://converse-pro-frontend.vercel.app",
-    githubUrl: "https://github.com/Sahilmd01/converse-pro",
-    featured: true,
-    accentColor: "from-blue-500 to-cyan-600",
-    status: "Live",
-    highlights: ["Real-time chat", "Media sharing", "User authentication"]
+    id: 4, wide: false,
+    title: "PlayBro",
+    category: "Gambling / Games",
+    desc: "Consumer-facing gaming and casino platform featuring slot games, live dealers, tournament system, and VIP loyalty rewards.",
+    image: "/projects/playbro.com.png",
+    tags: ["Angular", "Tailwind CSS", "SCSS", "RxJS"],
+    githubUrl: null,
+    color: "from-yellow-600 to-orange-700",
+    glow: "rgba(202,138,4,0.3)",
   },
   {
-    id: 3,
-    title: "Blogni AI",
-    category: "Artificial Intelligence",
-    description: "AI-powered content generation platform with multi-language support.",
-    image: "/projects/project3.png",
-    video: "/projects/videos/blogni-demo.mp4",
-    tags: ["Next.js", "Gemini AI", "Clerk Auth", "Redis"],
-    demoUrl: "https://blogni.vercel.app",
-    githubUrl: "https://github.com/Sahilmd01/Blogni",
-    accentColor: "from-amber-500 to-orange-600",
-    status: "Live",
-    highlights: ["AI content generation", "Multi-language", "User accounts"]
+    id: 5, wide: true,
+    title: "Blacklane — Chauffeur App",
+    category: "Transport",
+    desc: "Premium chauffeur booking platform with scheduled rides, live driver tracking, corporate accounts, and seamless Stripe payment flows. Inspired by Blacklane.",
+    image: "/projects/blaclane.png",
+    tags: ["React", "Next.js", "Tailwind CSS", "Google Maps", "Stripe"],
+    githubUrl: "https://github.com/ARSLAN-choudary/blacklane",
+    color: "from-zinc-600 to-slate-800",
+    glow: "rgba(113,113,122,0.3)",
   },
   {
-    id: 4,
-    title: "Spendlix",
-    category: "FinTech",
-    description: "Financial tracking platform with expense management and budgeting features.",
-    image: "/projects/project4.png",
-    video: "/projects/videos/spendlix-demo.mp4",
-    tags: ["React", "Chart.js", "Node.js", "Firebase"],
-    demoUrl: "https://spendlix.vercel.app/login",
-    githubUrl: "https://github.com/Sahilmd01/Spendlix",
-    accentColor: "from-rose-500 to-pink-600",
-    status: "Live",
-    highlights: ["Expense tracking", "Data visualization", "Budget planning"]
+    id: 6, wide: false,
+    title: "Wolt — Food Delivery",
+    category: "Food Delivery",
+    desc: "Modern food delivery app with restaurant discovery, live order tracking, multi-vendor management, and seamless checkout experience.",
+    image: "/projects/wolt.png",
+    tags: ["React", "Node.js", "MongoDB", "Mapbox"],
+    githubUrl: null,
+    color: "from-sky-600 to-blue-700",
+    glow: "rgba(2,132,199,0.3)",
   },
   {
-    id: 5,
-    title: "Eattoo",
-    category: "Food Tech",
-    description: "Food delivery platform with restaurant listings and order management.",
-    image: "/projects/project5.png",
-    video: "/projects/videos/eattoo-demo.mp4",
-    tags: ["React", "Redux", "Mapbox", "Stripe"],
-    demoUrl: "https://eattoo-food-delivery-website-frontend.onrender.com/",
-    githubUrl: "https://github.com/Sahilmd01/Eattoo-food-delivery-website",
-    accentColor: "from-violet-500 to-purple-600",
-    status: "Live",
-    highlights: ["Restaurant listings", "Order system", "Location services"]
+    id: 7, wide: false,
+    title: "United Motors",
+    category: "Automotive",
+    desc: "Full-featured automotive dealership platform with vehicle inventory, comparison tools, financing calculator, and test-drive booking.",
+    image: "/projects/inited.png",
+    tags: ["Angular", "Tailwind CSS", "TypeScript", "Node.js"],
+    githubUrl: "https://github.com/asjadBuilds/united-motors",
+    color: "from-slate-600 to-gray-800",
+    glow: "rgba(100,116,139,0.3)",
   },
   {
-    id: 6,
-    title: "JobQue",
-    category: "HR Tech",
-    description: "Job matching platform with candidate tracking and application management.",
-    image: "/projects/project6.png",
-    video: "/projects/videos/jobque-demo.mp4",
-    tags: ["Next.js", "PostgreSQL", "Redis", "AI Integration"],
-    demoUrl: "#",
-    githubUrl: "#",
-    accentColor: "from-orange-500 to-red-600",
-    status: "Development",
-    highlights: ["Job matching", "Candidate tracking", "Application system"]
-  }
+    id: 8, wide: false,
+    title: "KCRE — CRM Dashboard",
+    category: "CRM Dashboard",
+    desc: "Enterprise CRM dashboard for real estate with lead pipeline, agent analytics, deal tracking, and automated follow-up management.",
+    image: "/projects/kcre.png",
+    tags: ["React", "TypeScript", "Chart.js", "Tailwind CSS"],
+    githubUrl: null,
+    color: "from-blue-600 to-indigo-700",
+    glow: "rgba(37,99,235,0.3)",
+  },
+  {
+    id: 9, wide: true,
+    title: "Lushspaces — Real Estate CRM",
+    category: "Real Estate",
+    desc: "Lushspaces is a real estate admin panel and CRM system for managing property listings, client leads, agent performance, and deal pipelines in one unified dashboard.",
+    image: "/projects/lush.png",
+    tags: ["React", "Tailwind CSS", "Node.js", "MongoDB", "Chart.js"],
+    githubUrl: "https://github.com/fahadkhan1229/Lushspaces-adminpanel",
+    color: "from-emerald-600 to-teal-700",
+    glow: "rgba(5,150,105,0.3)",
+  },
+  {
+    id: 10, wide: false,
+    title: "Qutham — Dev Portfolio",
+    category: "Portfolio",
+    desc: "Sleek dark-themed developer portfolio with animated sections, project showcase, skills visualization, and integrated contact form.",
+    image: "/projects/qutham.png",
+    tags: ["React", "Framer Motion", "Tailwind CSS", "EmailJS"],
+    githubUrl: "https://github.com/ARSLAN-choudary/qutham-portfolio",
+    color: "from-violet-600 to-purple-700",
+    glow: "rgba(124,58,237,0.3)",
+  },
+  {
+    id: 11, wide: false,
+    title: "Property Site — Zameen",
+    category: "Real Estate",
+    desc: "Modern property listing website with map-based browsing, advanced search filters, agent profiles, and inquiry management.",
+    image: "/projects/zameen.png",
+    tags: ["React", "Next.js", "Tailwind CSS", "Google Maps"],
+    githubUrl: "https://github.com/ARSLAN-choudary/property-site",
+    color: "from-teal-600 to-cyan-700",
+    glow: "rgba(13,148,136,0.3)",
+  },
 ];
 
-const categoryColors = {
-  "Healthcare SaaS": "from-emerald-500/20 to-teal-600/20 text-emerald-600 border-emerald-500/30",
-  "E-commerce": "from-purple-500/20 to-indigo-600/20 text-purple-600 border-purple-500/30",
-  "Real-time Communication": "from-blue-500/20 to-cyan-600/20 text-blue-600 border-blue-500/30",
-  "Artificial Intelligence": "from-amber-500/20 to-orange-600/20 text-amber-600 border-amber-500/30",
-  "FinTech": "from-rose-500/20 to-pink-600/20 text-rose-600 border-rose-500/30",
-  "Food Tech": "from-violet-500/20 to-purple-600/20 text-violet-600 border-violet-500/30",
-  "HR Tech": "from-orange-500/20 to-red-600/20 text-orange-600 border-orange-500/30"
-};
+const CATEGORIES = ["All", "Gambling / Games", "Transport", "Food Delivery", "Automotive", "CRM Dashboard", "Real Estate", "Portfolio"];
 
-export const ProjectsSection = () => {
-  const [showAll, setShowAll] = useState(false);
-  const [activeFilter, setActiveFilter] = useState("All");
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [hoveredProject, setHoveredProject] = useState(null);
-  const [selectedVideo, setSelectedVideo] = useState(null);
-  const videoRef = useRef(null);
-  const sectionRef = useRef(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
-  
-  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
-  const opacityBg = useTransform(scrollYProgress, [0, 0.5, 1], [0.1, 0.2, 0.1]);
+/* ── Single project card ─────────────────────────────────────────── */
+const ProjectCard = ({ project, index }) => {
+  const [hovered, setHovered] = useState(false);
 
-  const filteredProjects = activeFilter === "All" 
-    ? projects 
-    : projects.filter(project => project.category === activeFilter);
-  
-  const displayedProjects = showAll ? filteredProjects : filteredProjects.slice(0, 3);
-
-  const categories = ["All", ...new Set(projects.map(project => project.category))];
-
-  const handleFilterChange = (category) => {
-    setActiveFilter(category);
-    setShowAll(false);
-    setIsMobileFilterOpen(false);
-  };
-
-  const handleVideoPlay = (project) => {
-    setSelectedVideo(project);
-  };
-
-  const handleCloseVideo = () => {
-    setSelectedVideo(null);
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  };
-
-  const ProjectHighlights = ({ highlights }) => (
-    <div className="space-y-2">
-      {highlights.map((highlight, index) => (
-        <div key={index} className="flex items-center gap-2 text-sm">
-          <div className="w-1.5 h-1.5 bg-primary rounded-full" />
-          <span className="text-muted-foreground">{highlight}</span>
-        </div>
-      ))}
-    </div>
-  );
+  const directions = [
+    { x: -60, y: 0 }, { x: 60, y: 0 }, { x: 0, y: 60 },
+    { x: -60, y: 0 }, { x: 0, y: -40 }, { x: 60, y: 0 },
+  ];
+  const dir = directions[index % directions.length];
 
   return (
-    <section 
-      id="projects" 
-      className="relative min-h-screen py-20 md:py-32 overflow-hidden bg-gradient-to-br from-background via-background to-primary/5"
-      ref={sectionRef}
+    <motion.div
+      initial={{ opacity: 0, x: dir.x, y: dir.y }}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay: (index % 3) * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className={project.wide ? "md:col-span-2" : ""}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      {/* Clean Background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-background" />
-      </div>
+      <div
+        className="relative rounded-2xl overflow-hidden border border-border h-64 md:h-72 cursor-pointer group"
+        style={{ boxShadow: hovered ? `0 0 40px ${project.glow}` : "none", transition: "box-shadow 0.4s ease" }}
+      >
+        {/* image */}
+        <motion.img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover"
+          animate={{ scale: hovered ? 1.08 : 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          loading="lazy"
+        />
 
-      <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative">
-        {/* Header */}
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <motion.div 
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6"
-            initial={{ scale: 0.8, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <Sparkles className="h-4 w-4" />
-            My Projects
-          </motion.div>
+        {/* always-visible gradient bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-          <motion.h2 
-            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            viewport={{ once: true }}
-          >
-            Project
-            <span className="block text-primary">Portfolio</span>
-          </motion.h2>
-
-          <motion.p 
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            A collection of projects I've built to showcase my skills in full-stack development and modern web technologies.
-          </motion.p>
-        </motion.div>
-
-        {/* Simple Filter */}
-        <motion.div 
-          className="flex justify-center mb-12"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
-        >
-          <div className="inline-flex flex-wrap justify-center gap-2">
-            {categories.map((category) => (
-              <motion.button
-                key={category}
-                onClick={() => handleFilterChange(category)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 border ${
-                  activeFilter === category
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background text-muted-foreground border-border hover:border-primary hover:text-primary"
-                }`}
-              >
-                {category}
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-          <AnimatePresence mode="wait">
-            {displayedProjects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                layout
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ 
-                  duration: 0.6, 
-                  delay: index * 0.1,
-                  type: "spring",
-                  stiffness: 100
-                }}
-                className="group"
-                onMouseEnter={() => setHoveredProject(project.id)}
-                onMouseLeave={() => setHoveredProject(null)}
-              >
-                <div className="relative bg-background border border-border rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 h-full flex flex-col">
-                  
-                  {/* Image/Video Section */}
-                  <div className="relative h-48 overflow-hidden">
-                    <motion.img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    
-                    {/* Status Badge */}
-                    <div className="absolute top-3 right-3">
-                      <div className={`px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${
-                        project.status === "Live" 
-                          ? "bg-emerald-500/20 text-emerald-600 border border-emerald-500/30"
-                          : "bg-amber-500/20 text-amber-600 border border-amber-500/30"
-                      }`}>
-                        {project.status}
-                      </div>
-                    </div>
-
-                    {/* Category Badge */}
-                    <div className="absolute top-3 left-3">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm border ${categoryColors[project.category]}`}>
-                        {project.category}
-                      </span>
-                    </div>
-
-                    {/* Hover Actions */}
-                    <motion.div 
-                      className="absolute inset-0 bg-black/50 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: hoveredProject === project.id ? 1 : 0 }}
-                    >
-                      {/* Video Play Button */}
-                      <motion.button
-                        onClick={() => handleVideoPlay(project)}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="p-3 rounded-full backdrop-blur-sm border bg-white/20 text-white border-white/30 hover:bg-white/30 transition-all duration-300"
-                      >
-                        <Play size={20} />
-                      </motion.button>
-                      
-                      {/* Code Button */}
-                      <motion.a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className={`p-3 rounded-full backdrop-blur-sm border transition-all duration-300 ${
-                          project.githubUrl === "#" 
-                            ? "bg-gray-500/50 text-gray-300 border-gray-500/30 cursor-not-allowed"
-                            : "bg-white/20 text-white border-white/30 hover:bg-white/30"
-                        }`}
-                        onClick={(e) => project.githubUrl === "#" && e.preventDefault()}
-                      >
-                        <Code size={20} />
-                      </motion.a>
-                    </motion.div>
-                  </div>
-
-                  {/* Content Section */}
-                  <div className="p-6 flex-1 flex flex-col">
-                    <div className="flex items-start justify-between mb-3">
-                      <h3 className="text-xl font-bold text-foreground">
-                        {project.title}
-                      </h3>
-                      {project.featured && (
-                        <motion.div 
-                          className="flex items-center gap-1 px-2 py-1 rounded-full bg-amber-500/20 text-amber-600 text-xs font-medium border border-amber-500/30"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: index * 0.1 + 0.3 }}
-                        >
-                          <Star size={12} className="fill-amber-500" /> 
-                          Featured
-                        </motion.div>
-                      )}
-                    </div>
-
-                    <p className="text-muted-foreground text-sm mb-4 leading-relaxed flex-1">
-                      {project.description}
-                    </p>
-
-                    {/* Key Features */}
-                    <div className="mb-4">
-                      <ProjectHighlights highlights={project.highlights} />
-                    </div>
-
-                    {/* Tech Stack */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.tags.map((tag, tagIndex) => (
-                        <motion.span
-                          key={tagIndex}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: index * 0.1 + tagIndex * 0.05 + 0.4 }}
-                          className="px-3 py-1 rounded-lg bg-primary/10 text-primary text-xs font-medium border border-primary/20"
-                        >
-                          {tag}
-                        </motion.span>
-                      ))}
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex gap-3 pt-4 border-t border-border">
-                      <motion.a
-                        href={project.demoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className={`flex-1 inline-flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${
-                          project.demoUrl === "#"
-                            ? "bg-muted text-muted-foreground cursor-not-allowed border border-border"
-                            : "bg-primary text-primary-foreground hover:bg-primary/90"
-                        }`}
-                        onClick={(e) => project.demoUrl === "#" && e.preventDefault()}
-                      >
-                        <Eye size={16} />
-                        {project.demoUrl === "#" ? "Coming Soon" : "Live Demo"}
-                      </motion.a>
-                      
-                      <motion.a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className={`inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium border transition-all duration-300 ${
-                          project.githubUrl === "#"
-                            ? "bg-muted text-muted-foreground cursor-not-allowed border-border"
-                            : "bg-background text-foreground border-border hover:border-primary hover:bg-primary/5"
-                        }`}
-                        onClick={(e) => project.githubUrl === "#" && e.preventDefault()}
-                      >
-                        <Github size={16} />
-                        Code
-                      </motion.a>
-                    </div>
-                  </div>
-
-                  {/* Accent Border */}
-                  <div className={`h-1 bg-gradient-to-r ${project.accentColor}`} />
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+        {/* category chip top-left */}
+        <div className={`absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-semibold text-white bg-gradient-to-r ${project.color} shadow-lg`}>
+          {project.category}
         </div>
 
-        {/* Load More */}
-        {filteredProjects.length > 3 && (
-          <motion.div 
-            className="text-center mt-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
+        {/* github chip top-right */}
+        {project.githubUrl && (
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="absolute top-3 right-3 p-2 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-white hover:bg-white/20 transition-all"
           >
-            <motion.button
-              onClick={() => setShowAll(!showAll)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`inline-flex items-center gap-3 px-8 py-4 rounded-2xl font-medium transition-all duration-300 ${
-                showAll
-                  ? "bg-muted text-foreground border border-border"
-                  : "bg-primary text-primary-foreground hover:bg-primary/90"
-              }`}
-            >
-              {showAll ? (
-                <>
-                  <ChevronUp size={18} />
-                  Show Less
-                </>
-              ) : (
-                <>
-                  View More Projects
-                  <ArrowRight size={18} />
-                </>
-              )}
-            </motion.button>
-          </motion.div>
+            <Github size={14} />
+          </a>
         )}
 
-        {/* Simple CTA */}
-        <motion.div 
-          className="text-center mt-20"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <div className="bg-background border border-border rounded-2xl p-12 max-w-4xl mx-auto">
-            <motion.div
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6"
-            >
-              <Zap className="h-4 w-4" />
-              Get In Touch
-            </motion.div>
+        {/* bottom info — always visible title, slide-up desc */}
+        <div className="absolute bottom-0 left-0 right-0 p-4">
+          <h3 className="text-white font-bold text-lg leading-tight mb-1">{project.title}</h3>
 
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">Like what you see?</h3>
-            <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-              I'm always open to discussing new opportunities and interesting projects.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <motion.a
-                href="#contact"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300"
-              >
-                Contact Me
-                <ArrowRight size={18} />
-              </motion.a>
-              
-              <motion.a
-                href="https://github.com/sahilmd01"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-medium border border-border text-foreground hover:border-primary hover:bg-primary/5 transition-all duration-300"
-              >
-                <Github size={18} />
-                View GitHub
-              </motion.a>
+          {/* slide-up description + tags */}
+          <motion.div
+            initial={false}
+            animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 16 }}
+            transition={{ duration: 0.3 }}
+          >
+            <p className="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">{project.desc}</p>
+            <div className="flex flex-wrap gap-1.5">
+              {project.tags.slice(0, 3).map((t) => (
+                <span key={t} className="px-2 py-0.5 rounded-md bg-white/10 backdrop-blur-sm text-white/90 text-[10px] font-medium border border-white/10">
+                  {t}
+                </span>
+              ))}
+              {project.tags.length > 3 && (
+                <span className="px-2 py-0.5 rounded-md bg-white/10 text-white/70 text-[10px]">+{project.tags.length - 3}</span>
+              )}
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
+
+        {/* hover overlay tint */}
+        <motion.div
+          className={`absolute inset-0 bg-gradient-to-br ${project.color} mix-blend-multiply`}
+          animate={{ opacity: hovered ? 0.25 : 0 }}
+          transition={{ duration: 0.4 }}
+        />
+      </div>
+    </motion.div>
+  );
+};
+
+/* ── Section ─────────────────────────────────────────────────────── */
+export const ProjectsSection = () => {
+  const [activeFilter, setActiveFilter] = useState("All");
+
+  const filtered = activeFilter === "All"
+    ? projects
+    : projects.filter((p) => p.category === activeFilter);
+
+  return (
+    <section id="projects" className="relative py-24 px-4 sm:px-6 overflow-hidden">
+
+      {/* unique diagonal bg stripe */}
+      <div className="absolute inset-0 -z-20 overflow-hidden pointer-events-none">
+        <div
+          className="absolute w-full h-full opacity-[0.04]"
+          style={{
+            backgroundImage: "repeating-linear-gradient(45deg, hsl(185,100%,52%) 0, hsl(185,100%,52%) 1px, transparent 0, transparent 50%)",
+            backgroundSize: "24px 24px",
+          }}
+        />
+        {/* left glow */}
+        <div className="absolute top-1/3 -left-40 w-[500px] h-[500px] rounded-full bg-primary/8 blur-[120px]" />
+        {/* right glow */}
+        <div className="absolute bottom-1/4 -right-40 w-[400px] h-[400px] rounded-full bg-secondary/8 blur-[120px]" />
       </div>
 
-      {/* Video Modal */}
-      <AnimatePresence>
-        {selectedVideo && (
+      <div className="container max-w-7xl mx-auto">
+
+        {/* ── header ── */}
+        <motion.div
+          className="mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <div>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium mb-4">
+              <Sparkles className="h-4 w-4" /> Selected Work
+            </div>
+            <h2 className="text-5xl sm:text-6xl font-black leading-none">
+              <span className="text-foreground block">My</span>
+              <span
+                className="block"
+                style={{ background: "linear-gradient(135deg, hsl(185,100%,52%), hsl(268,75%,62%))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}
+              >
+                Projects
+              </span>
+            </h2>
+          </div>
+          <p className="text-muted-foreground max-w-sm text-sm leading-relaxed lg:text-right">
+            A curated collection of real-world projects spanning betting platforms, transport apps, real estate, and more.
+          </p>
+        </motion.div>
+
+        {/* ── filter tabs ── */}
+        <motion.div
+          className="flex flex-wrap gap-2 mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+        >
+          {CATEGORIES.map((cat) => {
+            const active = activeFilter === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveFilter(cat)}
+                className="relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
+                style={active ? {
+                  background: "linear-gradient(135deg, hsl(185,100%,52%), hsl(268,75%,62%))",
+                  color: "hsl(232,30%,4%)",
+                  boxShadow: "0 0 20px hsl(185,100%,52%/0.35)",
+                } : {
+                  background: "hsl(var(--card))",
+                  color: "hsl(var(--muted-foreground))",
+                  border: "1px solid hsl(var(--border))",
+                }}
+              >
+                {cat}
+                {active && (
+                  <motion.div
+                    layoutId="filter-underline"
+                    className="absolute -bottom-1 left-4 right-4 h-0.5 rounded-full bg-white/30"
+                  />
+                )}
+              </button>
+            );
+          })}
+        </motion.div>
+
+        {/* ── bento grid ── */}
+        <AnimatePresence mode="wait">
           <motion.div
+            key={activeFilter}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
-            onClick={handleCloseVideo}
+            transition={{ duration: 0.3 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-5"
           >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ type: "spring", damping: 25 }}
-              className="relative bg-background rounded-2xl overflow-hidden shadow-2xl max-w-4xl w-full max-h-[80vh]"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Header */}
-              <div className="flex items-center justify-between p-6 border-b border-border">
-                <div>
-                  <h3 className="text-xl font-bold text-foreground">
-                    {selectedVideo.title} Demo
-                  </h3>
-                  <p className="text-muted-foreground text-sm">
-                    {selectedVideo.category}
-                  </p>
-                </div>
-                <motion.button
-                  onClick={handleCloseVideo}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="p-2 rounded-full hover:bg-muted transition-colors duration-200"
-                >
-                  <X size={24} />
-                </motion.button>
-              </div>
-
-              {/* Video Player */}
-              <div className="aspect-video bg-black">
-                <video
-                  ref={videoRef}
-                  src={selectedVideo.video}
-                  controls
-                  autoPlay
-                  className="w-full h-full object-contain"
-                  onEnded={handleCloseVideo}
-                >
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-
-              {/* Modal Footer */}
-              <div className="p-6 border-t border-border">
-                <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
-                  <p className="text-muted-foreground text-sm flex-1">
-                    Watch the demo of {selectedVideo.title} in action
-                  </p>
-                  <div className="flex gap-3">
-                    <motion.a
-                      href={selectedVideo.demoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                        selectedVideo.demoUrl === "#"
-                          ? "bg-muted text-muted-foreground cursor-not-allowed border border-border"
-                          : "bg-primary text-primary-foreground hover:bg-primary/90"
-                      }`}
-                      onClick={(e) => selectedVideo.demoUrl === "#" && e.preventDefault()}
-                    >
-                      Visit Live Site
-                    </motion.a>
-                    <motion.a
-                      href={selectedVideo.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`px-6 py-2 rounded-lg text-sm font-medium border transition-all duration-300 ${
-                        selectedVideo.githubUrl === "#"
-                          ? "bg-muted text-muted-foreground cursor-not-allowed border-border"
-                          : "bg-background text-foreground border-border hover:border-primary hover:bg-primary/5"
-                      }`}
-                      onClick={(e) => selectedVideo.githubUrl === "#" && e.preventDefault()}
-                    >
-                      View Code
-                    </motion.a>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+            {filtered.map((project, i) => (
+              <ProjectCard key={project.id} project={project} index={i} />
+            ))}
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>
+
+        {/* ── CTA ── */}
+        <motion.div
+          className="mt-20 relative overflow-hidden rounded-3xl border border-border p-10 md:p-14 text-center"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          {/* CTA bg */}
+          <div className="absolute inset-0 -z-10"
+            style={{ background: "radial-gradient(ellipse at 50% 100%, hsl(185,100%,52%/0.08), transparent 70%)" }}
+          />
+          <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+
+          <h3 className="text-3xl md:text-4xl font-black mb-3 text-foreground">Like what you see?</h3>
+          <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
+            I'm always open to new challenges. Let's build something remarkable together.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <a
+              href="#contact"
+              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-sm text-primary-foreground transition-all hover:scale-105 hover:shadow-xl hover:shadow-primary/20"
+              style={{ background: "linear-gradient(135deg, hsl(185,100%,52%), hsl(268,75%,62%))" }}
+            >
+              Start a Project <ArrowUpRight size={16} />
+            </a>
+            <a
+              href="https://github.com/ARSLAN-choudary"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-sm border border-border text-muted-foreground hover:border-primary/40 hover:text-foreground transition-all hover:scale-105"
+            >
+              <Github size={16} /> View GitHub
+            </a>
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 };

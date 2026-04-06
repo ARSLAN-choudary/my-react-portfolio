@@ -1,60 +1,51 @@
 import { useEffect, useState, useRef } from "react";
-import {
-  Home,
-  User,
-  Code,
-  Briefcase,
-  MessageSquare,
-  Mail,
-  BookOpen,
-  Sun,
-  Moon,
-  Youtube,
-  Volume2,
-  VolumeX,
-  Github,
-  Linkedin,
-  Globe,
-} from "lucide-react";
-import { motion } from "framer-motion";
+import { Home, User, Code, Briefcase, MessageSquare, Mail, Sun, Moon, Volume2, VolumeX, Github, Linkedin, Globe } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { name: "Home", href: "#hero", icon: Home },
-  { name: "About", href: "#about", icon: User },
-  { name: "Skills", href: "#skills", icon: Code },
-  { name: "Projects", href: "#projects", icon: Briefcase },
-  { name: "Testimonials", href: "#testimonials", icon: MessageSquare },
-  { name: "Contact", href: "#contact", icon: Mail },
-  { name: "Blog", href: "https://blogni.vercel.app", icon: BookOpen },
+  { name: "Home",        href: "#hero",         icon: Home },
+  { name: "About",       href: "#about",        icon: User },
+  { name: "Skills",      href: "#skills",       icon: Code },
+  { name: "Projects",    href: "#projects",     icon: Briefcase },
+  { name: "Testimonials",href: "#testimonials", icon: MessageSquare },
+  { name: "Contact",     href: "#contact",      icon: Mail },
 ];
 
 const ThemeToggle = () => {
-  const [theme, setTheme] = useState("light");
+  const [dark, setDark] = useState(true);
 
   useEffect(() => {
     const stored = localStorage.getItem("theme");
-    if (stored === "dark") {
-      document.documentElement.classList.add("dark");
-      setTheme("dark");
-    }
+    const isDark = stored ? stored === "dark" : true;
+    setDark(isDark);
+    document.documentElement.classList.toggle("dark", isDark);
   }, []);
 
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    document.documentElement.classList.toggle("dark");
-    localStorage.setItem("theme", newTheme);
-    setTheme(newTheme);
+  const toggle = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
   };
 
   return (
     <button
-      onClick={toggleTheme}
-      className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800"
-      title="Toggle theme"
+      onClick={toggle}
+      className="p-2 rounded-full hover:bg-primary/10 text-muted-foreground hover:text-primary transition-all duration-200"
       aria-label="Toggle theme"
     >
-      {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+      <AnimatePresence mode="wait" initial={false}>
+        {dark ? (
+          <motion.div key="sun" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
+            <Sun className="w-4 h-4" />
+          </motion.div>
+        ) : (
+          <motion.div key="moon" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
+            <Moon className="w-4 h-4" />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </button>
   );
 };
@@ -67,222 +58,140 @@ export const Navbar = () => {
   const lastScrollYRef = useRef(0);
   const audioRef = useRef(null);
 
-  const musicUrl = "/music.mp3";
-
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      audioRef.current = new Audio(musicUrl);
-      audioRef.current.loop = true;
-      audioRef.current.volume = 0.5;
-      audioRef.current.preload = "auto";
-
-      const handleCanPlay = () => setIsAudioReady(true);
-
-      audioRef.current.addEventListener("canplaythrough", handleCanPlay);
-
-      return () => {
-        if (audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current.removeEventListener("canplaythrough", handleCanPlay);
-          audioRef.current = null;
-        }
-      };
-    }
+    audioRef.current = new Audio("/music.mp3");
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.4;
+    audioRef.current.preload = "auto";
+    const onReady = () => setIsAudioReady(true);
+    audioRef.current.addEventListener("canplaythrough", onReady);
+    return () => {
+      audioRef.current?.pause();
+      audioRef.current?.removeEventListener("canplaythrough", onReady);
+    };
   }, []);
 
   const toggleMusic = () => {
     if (!audioRef.current || !isAudioReady) return;
-
-    if (isMusicPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play().catch(console.error);
-    }
-
+    isMusicPlaying ? audioRef.current.pause() : audioRef.current.play().catch(() => {});
     setIsMusicPlaying(!isMusicPlaying);
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setShowNavbar(y < lastScrollYRef.current || y < 100);
+      lastScrollYRef.current = y;
 
-      if (currentScrollY > lastScrollYRef.current && currentScrollY > 100) {
-        setShowNavbar(false);
-      } else {
-        setShowNavbar(true);
-      }
-
-      lastScrollYRef.current = currentScrollY;
-
-      const sections = navItems.map((item) => item.href);
-      const scrollPosition = currentScrollY + 100;
-
-      for (const section of sections) {
-        const element = document.querySelector(section);
-        if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetHeight = element.offsetHeight;
-
-          if (
-            scrollPosition >= offsetTop &&
-            scrollPosition < offsetTop + offsetHeight
-          ) {
-            setActiveSection(section);
+      for (const item of navItems) {
+        const el = document.querySelector(item.href);
+        if (el) {
+          const { offsetTop, offsetHeight } = el;
+          if (y + 100 >= offsetTop && y + 100 < offsetTop + offsetHeight) {
+            setActiveSection(item.href);
             break;
           }
         }
       }
     };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <>
-      {/* Top Right Buttons */}
+      {/* ── Top-right pill (social + music + theme) ── */}
       <motion.div
-        className="fixed top-4 right-4 z-50 flex gap-2"
-        initial={{ opacity: 0, y: -20 }}
+        className="fixed top-4 right-4 z-50 flex items-center gap-1.5 px-3 py-2 rounded-2xl border border-border bg-card/80 backdrop-blur-xl shadow-lg"
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.4 }}
       >
-        {/* Website Globe Button */}
-        <motion.a
-          href="https://avoliq.vercel.app"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            "p-2 rounded-full bg-white/80 dark:bg-black/80 backdrop-blur-md",
-            "text-green-600 hover:bg-green-100 dark:hover:bg-green-900/50",
-            "border border-gray-200 dark:border-gray-700 shadow-sm",
-            "flex items-center justify-center"
-          )}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          title="My Website"
-          aria-label="My Website"
+        {/* GitHub */}
+        <a
+          href="https://github.com/ARSLAN-choudary"
+          target="_blank" rel="noopener noreferrer"
+          className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-200"
+          aria-label="GitHub"
         >
-          <Globe className="w-5 h-5" />
-        </motion.a>
+          <Github className="w-4 h-4" />
+        </a>
 
-        {/* GitHub Button */}
-        <motion.a
-          href="https://github.com/sahilmd01" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            "p-2 rounded-full bg-white/80 dark:bg-black/80 backdrop-blur-md",
-            "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50",
-            "border border-gray-200 dark:border-gray-700 shadow-sm",
-            "flex items-center justify-center"
-          )}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          title="GitHub Profile"
-          aria-label="GitHub Profile"
+        {/* LinkedIn */}
+        <a
+          href="https://www.linkedin.com/in/arslan-aslam-557511324/"
+          target="_blank" rel="noopener noreferrer"
+          className="p-1.5 rounded-lg text-muted-foreground hover:text-blue-400 hover:bg-blue-400/10 transition-all duration-200"
+          aria-label="LinkedIn"
         >
-          <Github className="w-5 h-5" />
-        </motion.a>
+          <Linkedin className="w-4 h-4" />
+        </a>
 
-        {/* LinkedIn Button */}
-        <motion.a
-          href="https://linkedin.com/in/codewithkinu" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            "p-2 rounded-full bg-white/80 dark:bg-black/80 backdrop-blur-md",
-            "text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/50",
-            "border border-gray-200 dark:border-gray-700 shadow-sm",
-            "flex items-center justify-center"
-          )}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          title="LinkedIn Profile"
-          aria-label="LinkedIn Profile"
-        >
-          <Linkedin className="w-5 h-5" />
-        </motion.a>
+        <div className="w-px h-4 bg-border mx-0.5" />
 
-        {/* YouTube Button */}
-        <motion.a
-          href="https://www.youtube.com/@codewithkinu"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            "p-2 rounded-full bg-white/80 dark:bg-black/80 backdrop-blur-md",
-            "text-red-600 hover:bg-red-100 dark:hover:bg-red-900/50",
-            "border border-gray-200 dark:border-gray-700 shadow-sm",
-            "flex items-center justify-center"
-          )}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          title="YouTube Channel"
-          aria-label="YouTube Channel"
-        >
-          <Youtube className="w-5 h-5" />
-        </motion.a>
-
-        {/* Music Button */}
-        <motion.button
+        {/* Music */}
+        <button
           onClick={toggleMusic}
           disabled={!isAudioReady}
           className={cn(
-            "p-2 rounded-full bg-white/80 dark:bg-black/80 backdrop-blur-md",
-            "text-primary hover:bg-primary/10 dark:hover:bg-primary/20",
-            "border border-gray-200 dark:border-gray-700 shadow-sm",
-            "flex items-center justify-center",
-            !isAudioReady && "opacity-50 cursor-not-allowed"
+            "p-1.5 rounded-lg transition-all duration-200",
+            isAudioReady
+              ? "text-muted-foreground hover:text-primary hover:bg-primary/10 cursor-pointer"
+              : "text-muted-foreground/30 cursor-not-allowed"
           )}
-          whileHover={{ scale: isAudioReady ? 1.05 : 1 }}
-          whileTap={{ scale: isAudioReady ? 0.95 : 1 }}
-          title={
-            isAudioReady ? (isMusicPlaying ? "Pause music" : "Play music") : "Loading music..."
-          }
-          aria-label={
-            isAudioReady ? (isMusicPlaying ? "Pause music" : "Play music") : "Loading music"
-          }
+          aria-label={isMusicPlaying ? "Pause music" : "Play music"}
         >
-          {isMusicPlaying ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
-        </motion.button>
+          {isMusicPlaying ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+        </button>
+
+        {/* Theme */}
+        <ThemeToggle />
       </motion.div>
 
-      {/* Bottom Navbar */}
-      <motion.div
-        className={cn(
-          "fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50",
-          "transition-transform duration-300 ease-in-out",
-          showNavbar ? "translate-y-0" : "translate-y-full"
-        )}
-        style={{ willChange: "transform" }}
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="flex items-center justify-center bg-white/80 dark:bg-black/80 backdrop-blur-md rounded-full shadow-lg p-2 border border-gray-200 dark:border-gray-700">
-          <div className="flex space-x-1 items-center">
-            {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  "p-2 rounded-full transition-colors flex flex-col items-center",
-                  activeSection === item.href
-                    ? "bg-primary text-white"
-                    : "text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary"
-                )}
-                aria-label={item.name}
-              >
-                <item.icon className="w-5 h-5" />
-                <span className="text-xs mt-1 hidden md:block">{item.name}</span>
-              </a>
-            ))}
-            <div className="flex items-center px-2">
+      {/* ── Bottom nav pill ── */}
+      <AnimatePresence>
+        {showNavbar && (
+          <motion.div
+            className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50"
+            initial={{ y: 80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 80, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          >
+            <div className="flex items-center gap-1 px-3 py-2 rounded-2xl border border-border bg-card/80 backdrop-blur-xl shadow-xl shadow-black/40">
+              {navItems.map((item) => {
+                const active = activeSection === item.href;
+                return (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    aria-label={item.name}
+                    className={cn(
+                      "relative flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-200",
+                      active
+                        ? "text-primary-foreground"
+                        : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+                    )}
+                  >
+                    {active && (
+                      <motion.div
+                        layoutId="nav-pill"
+                        className="absolute inset-0 rounded-xl"
+                        style={{ background: "linear-gradient(135deg, hsl(185,100%,52%), hsl(268,75%,62%))" }}
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                    <item.icon className="w-4 h-4 relative z-10" />
+                    <span className="text-[10px] font-medium relative z-10 hidden sm:block">{item.name}</span>
+                  </a>
+                );
+              })}
+              <div className="w-px h-6 bg-border mx-1" />
               <ThemeToggle />
             </div>
-          </div>
-        </div>
-      </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

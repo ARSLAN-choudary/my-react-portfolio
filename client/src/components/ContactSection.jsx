@@ -1,300 +1,286 @@
+import emailjs from "@emailjs/browser";
 import {
-  Instagram,
-  Linkedin,
   Mail,
   MapPin,
   Phone,
   Send,
-  Twitter,
   Github,
-  Loader2
+  Linkedin,
+  Twitter,
+  Instagram,
+  CheckCircle,
+  Loader2,
+  MessageCircle,
+  Zap,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useRef, useState } from "react";
+
+// ── EmailJS config ─────────────────────────────────────────────────
+const EMAILJS_SERVICE_ID  = "service_b70fq7o";
+const EMAILJS_TEMPLATE_ID = "template_kuojgfn";
+const EMAILJS_PUBLIC_KEY  = "T4IVeiG_NuN1_P4Jc";
+// ──────────────────────────────────────────────────────────────────
+
+const contactInfo = [
+  {
+    icon: Mail,
+    label: "Email",
+    value: "arslanchoudary23@gmail.com",
+    href: "mailto:arslanchoudary23@gmail.com",
+    color: "text-blue-500",
+    bg: "bg-blue-500/10",
+  },
+  {
+    icon: Phone,
+    label: "Phone",
+    value: "0309-7037742",
+    href: "tel:+923097037742",
+    color: "text-emerald-500",
+    bg: "bg-emerald-500/10",
+  },
+  {
+    icon: MapPin,
+    label: "Location",
+    value: "Pakistan",
+    href: null,
+    color: "text-purple-500",
+    bg: "bg-purple-500/10",
+  },
+];
+
+const socials = [
+  { icon: Github,   href: "https://github.com/ARSLAN-choudary",               label: "GitHub",    color: "hover:text-white hover:bg-gray-800" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/arslan-aslam-557511324/", label: "LinkedIn",  color: "hover:text-white hover:bg-blue-600" },
+  { icon: Twitter,  href: "#",                                                   label: "Twitter",   color: "hover:text-white hover:bg-sky-500" },
+  { icon: Instagram,href: "#",                                                   label: "Instagram", color: "hover:text-white hover:bg-pink-600" },
+];
 
 export const ContactSection = () => {
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  
-  const validateForm = () => {
-    if (!formData.name.trim()) {
-      toast({
-        title: "Name is required",
-        variant: "destructive"
-      });
-      return false;
-    }
-    
-    if (!formData.email.trim()) {
-      toast({
-        title: "Email is required",
-        variant: "destructive"
-      });
-      return false;
-    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      toast({
-        title: "Invalid email format",
-        variant: "destructive"
-      });
-      return false;
-    }
-    
-    if (!formData.message.trim() || formData.message.length < 10) {
-      toast({
-        title: "Message must be at least 10 characters",
-        variant: "destructive"
-      });
-      return false;
-    }
-    
-    return true;
-  };
-  
+  const formRef = useRef(null);
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [formData, setFormData] = useState({ name: "", email: "", title: "", message: "" });
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!validateForm()) return;
-    
-    setIsSubmitting(true);
-    
-    try {
-      const response = await fetch('https://formspree.io/f/xwpbojaj', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    if (!formData.name || !formData.email || !formData.message) return;
 
-      if (response.ok) {
-        toast({
-          title: "Message sent! 🎉",
-          description: "I'll get back to you within 24 hours.",
-          variant: "success",
-          className: "bg-green-600 text-white dark:bg-green-500 border border-green-700 shadow-lg"
-        });
-        setFormData({ name: '', email: '', message: '' });
-      } else {
-        throw new Error('Failed to send message');
-      }
-    } catch (error) {
-      toast({
-        title: "Oops! Something went wrong",
-        description: "Please try again or email me directly at codewithkinu@gmail.com",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
+    setStatus("loading");
+    try {
+      await emailjs.sendForm(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        EMAILJS_PUBLIC_KEY
+      );
+      setStatus("success");
+      setFormData({ name: "", email: "", title: "", message: "" });
+      setTimeout(() => setStatus("idle"), 4000);
+    } catch {
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 4000);
     }
   };
 
   return (
-    <section id="contact" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 relative bg-background">
+    <section id="contact" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-background">
+      {/* subtle grid bg */}
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:60px_60px] opacity-30" />
+      {/* gradient blobs – small, cheap */}
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] -z-10 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] -z-10 rounded-full bg-purple-500/5 blur-3xl pointer-events-none" />
+
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-12 sm:mb-16">
-          <span className="inline-block px-3 py-1 text-xs sm:text-sm font-medium rounded-full bg-primary/10 text-primary mb-3 sm:mb-4">
-            Let's Connect
+        {/* Header */}
+        <div className="text-center mb-14">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+            <MessageCircle className="h-4 w-4" /> Let's Connect
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600">
-            Get In Touch
+          <h2 className="text-4xl sm:text-5xl font-bold mb-3">
+            Get In{" "}
+            <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+              Touch
+            </span>
           </h2>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Have a project in mind or just want to say hi? My inbox is always open.
+          <p className="text-muted-foreground max-w-xl mx-auto text-base">
+            Have a project in mind? Let's build something great together.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12">
-          {/* Contact Information */}
-          <div className="space-y-6 sm:space-y-8 p-6 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-secondary/20 to-background border border-border">
-            <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-2">
-              <span className="w-3 sm:w-4 h-3 sm:h-4 rounded-full bg-primary"></span>
-              Contact Details
-            </h3>
+        <div className="grid lg:grid-cols-5 gap-8">
+          {/* ── Left panel ── */}
+          <div className="lg:col-span-2 flex flex-col gap-5">
+            {/* Contact info cards */}
+            {contactInfo.map(({ icon: Icon, label, value, href, color, bg }) => (
+              <div
+                key={label}
+                className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-card/60 backdrop-blur-sm hover:border-primary/40 transition-colors duration-200"
+              >
+                <div className={`p-3 rounded-xl ${bg} flex-shrink-0`}>
+                  <Icon className={`h-5 w-5 ${color}`} />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">{label}</p>
+                  {href ? (
+                    <a href={href} className="font-medium text-sm hover:text-primary transition-colors">
+                      {value}
+                    </a>
+                  ) : (
+                    <p className="font-medium text-sm">{value}</p>
+                  )}
+                </div>
+              </div>
+            ))}
 
-            <div className="space-y-4 sm:space-y-6">
-              <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-accent/30 rounded-lg sm:rounded-xl transition-all duration-300">
-                <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-primary/10 text-primary">
-                  <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm text-muted-foreground">Email</p>
-                  <a
-                    href="mailto:codewithkinu@gmail.com"
-                    className="text-sm sm:text-base font-medium hover:text-primary transition-colors"
-                  >
-                    codewithkinu@gmail.com
-                  </a>
-                </div>
+            {/* Availability badge */}
+            <div className="p-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 flex items-center gap-3">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
+              </span>
+              <div>
+                <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">Available for work</p>
+                <p className="text-xs text-muted-foreground">Response within 24 hours</p>
               </div>
-              
-              <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-accent/30 rounded-lg sm:rounded-xl transition-all duration-300">
-                <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-primary/10 text-primary">
-                  <Phone className="h-4 w-4 sm:h-5 sm:w-5" />
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm text-muted-foreground">Phone</p>
-                  <a
-                    href="tel:+919315145594"
-                    className="text-sm sm:text-base font-medium hover:text-primary transition-colors"
-                  >
-                    +91 9315145594
-                  </a>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-accent/30 rounded-lg sm:rounded-xl transition-all duration-300">
-                <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-primary/10 text-primary">
-                  <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm text-muted-foreground">Location</p>
-                  <span className="text-sm sm:text-base font-medium">
-                    Bengaluru, Karnataka India
-                  </span>
-                </div>
-              </div>
+              <Zap className="h-4 w-4 text-emerald-500 ml-auto" />
             </div>
 
-            <div className="pt-6 sm:pt-8">
-              <h4 className="font-medium mb-3 sm:mb-4 text-xs sm:text-sm text-muted-foreground">Find me on</h4>
-              <div className="flex gap-2 sm:gap-3">
-                {[
-                  {
-                    icon: Linkedin,
-                    label: "LinkedIn",
-                    url: "https://www.linkedin.com/in/codewithkinu",
-                  },
-                  {
-                    icon: Twitter,
-                    label: "Twitter",
-                    url: "#",
-                  },
-                  {
-                    icon: Github,
-                    label: "GitHub",
-                    url: "https://github.com/Sahilmd01",
-                  },
-                  {
-                    icon: Instagram,
-                    label: "Instagram",
-                    url: "https://www.instagram.com/dubbinut",
-                  },
-                ].map((social, index) => (
+            {/* Socials */}
+            <div className="p-4 rounded-2xl border border-border bg-card/60 backdrop-blur-sm">
+              <p className="text-xs text-muted-foreground mb-3 font-medium uppercase tracking-wider">Find me on</p>
+              <div className="flex gap-2 flex-wrap">
+                {socials.map(({ icon: Icon, href, label, color }) => (
                   <a
-                    key={index}
-                    href={social.url}
+                    key={label}
+                    href={href}
+                    aria-label={label}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-accent hover:bg-primary/10 text-muted-foreground hover:text-primary transition-all duration-300"
-                    aria-label={social.label}
+                    className={`p-2.5 rounded-xl border border-border text-muted-foreground transition-all duration-200 ${color}`}
                   >
-                    <social.icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <Icon className="h-4 w-4" />
                   </a>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div className="p-6 sm:p-8 rounded-xl sm:rounded-2xl bg-card border border-border shadow-sm">
-            <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-2">
-              <span className="w-3 sm:w-4 h-3 sm:h-4 rounded-full bg-primary"></span>
-              Send Me a Message
-            </h3>
+          {/* ── Right panel: Form ── */}
+          <div className="lg:col-span-3">
+            <div className="relative p-6 sm:p-8 rounded-2xl border border-border bg-card/60 backdrop-blur-sm">
+              {/* top accent line */}
+              <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
-            <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
-              <div className="space-y-1">
-                <label
-                  htmlFor="name"
-                  className="text-xs sm:text-sm font-medium text-muted-foreground"
-                >
-                  Your Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all text-sm sm:text-base"
-                  placeholder="John Doe"
-                />
-              </div>
+              {status === "success" ? (
+                <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
+                  <div className="p-4 rounded-full bg-emerald-500/10">
+                    <CheckCircle className="h-10 w-10 text-emerald-500" />
+                  </div>
+                  <h3 className="text-xl font-bold">Message Sent!</h3>
+                  <p className="text-muted-foreground text-sm max-w-xs">
+                    Thanks for reaching out. I'll get back to you within 24 hours.
+                  </p>
+                </div>
+              ) : (
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
+                  {/* hidden time field — matches {{time}} in EmailJS template */}
+                  <input type="hidden" name="time" value={new Date().toLocaleString("en-PK", { dateStyle: "medium", timeStyle: "short" })} />
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div className="space-y-1.5">
+                      <label htmlFor="name" className="text-sm font-medium">
+                        Your Name <span className="text-primary">*</span>
+                      </label>
+                      <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Arslan"
+                        className="w-full px-4 py-2.5 rounded-xl border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label htmlFor="email" className="text-sm font-medium">
+                        Email Address <span className="text-primary">*</span>
+                      </label>
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="you@example.com"
+                        className="w-full px-4 py-2.5 rounded-xl border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                      />
+                    </div>
+                  </div>
 
-              <div className="space-y-1">
-                <label
-                  htmlFor="email"
-                  className="text-xs sm:text-sm font-medium text-muted-foreground"
-                >
-                  Your Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all text-sm sm:text-base"
-                  placeholder="john@example.com"
-                />
-              </div>
+                  <div className="space-y-1.5">
+                    <label htmlFor="title" className="text-sm font-medium">
+                      Subject
+                    </label>
+                    <input
+                      id="title"
+                      name="title"
+                      type="text"
+                      value={formData.title}
+                      onChange={handleChange}
+                      placeholder="What's this about?"
+                      className="w-full px-4 py-2.5 rounded-xl border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                    />
+                  </div>
 
-              <div className="space-y-1">
-                <label
-                  htmlFor="message"
-                  className="text-xs sm:text-sm font-medium text-muted-foreground"
-                >
-                  Your Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={4}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all resize-none text-sm sm:text-base"
-                  placeholder="Hey, I'd love to collaborate on..."
-                />
-              </div>
+                  <div className="space-y-1.5">
+                    <label htmlFor="message" className="text-sm font-medium">
+                      Message <span className="text-primary">*</span>
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      required
+                      rows={5}
+                      value={formData.message}
+                      onChange={handleChange}
+                      placeholder="Tell me about your project..."
+                      className="w-full px-4 py-2.5 rounded-xl border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all resize-none"
+                    />
+                  </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={cn(
-                  "w-full flex items-center justify-center gap-2 py-2 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-medium hover:opacity-90 transition-all duration-300 shadow-lg shadow-primary/20 text-sm sm:text-base",
-                  isSubmitting && "opacity-80 cursor-not-allowed"
-                )}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    Send Message
-                    <Send size={16} className="sm:size-[18px]" />
-                  </>
-                )}
-              </button>
-            </form>
+                  {status === "error" && (
+                    <p className="text-sm text-red-500 bg-red-500/10 px-4 py-2.5 rounded-xl border border-red-500/20">
+                      Something went wrong. Please email me directly at{" "}
+                      <a href="mailto:arslanchoudary23@gmail.com" className="underline font-medium">
+                        arslanchoudary23@gmail.com
+                      </a>
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={status === "loading"}
+                    className="w-full flex items-center justify-center gap-2.5 py-3 px-6 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-semibold text-sm hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed shadow-md shadow-primary/20"
+                  >
+                    {status === "loading" ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Sending…
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4" />
+                        Send Message
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </div>
