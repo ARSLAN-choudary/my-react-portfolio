@@ -85,33 +85,33 @@ const InfiniteScrollSkills = ({ skills }) => {
   const duplicatedSkills = [...skills, ...skills, ...skills];
   
   return (
-    <div className="overflow-hidden py-8">
+    <div className="overflow-hidden py-4 sm:py-8">
       <motion.div
-        className="flex gap-8 mb-8"
+        className="flex gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8"
         animate={{ x: ["0%", "-100%"] }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
       >
         {duplicatedSkills.map((skill, index) => (
-          <div key={`${skill.name}-${index}`} className="flex-shrink-0 flex flex-col items-center gap-2">
-            <div className="w-16 h-16 rounded-full bg-card border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-              <img src={iconImages[skill.icon]} alt={skill.name} className="w-8 h-8 object-contain" />
+          <div key={`${skill.name}-${index}`} className="flex-shrink-0 flex flex-col items-center gap-1.5 sm:gap-2">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-card border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+              <img src={iconImages[skill.icon]} alt={skill.name} className="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
             </div>
-            <span className="text-sm font-medium text-center">{skill.name}</span>
+            <span className="text-xs sm:text-sm font-medium text-center">{skill.name}</span>
           </div>
         ))}
       </motion.div>
-      
+
       <motion.div
-        className="flex gap-8"
+        className="flex gap-4 sm:gap-6 md:gap-8"
         animate={{ x: ["-100%", "0%"] }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
       >
         {[...duplicatedSkills].reverse().map((skill, index) => (
-          <div key={`${skill.name}-reverse-${index}`} className="flex-shrink-0 flex flex-col items-center gap-2">
-            <div className="w-16 h-16 rounded-full bg-card border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-              <img src={iconImages[skill.icon]} alt={skill.name} className="w-8 h-8 object-contain" />
+          <div key={`${skill.name}-reverse-${index}`} className="flex-shrink-0 flex flex-col items-center gap-1.5 sm:gap-2">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-card border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+              <img src={iconImages[skill.icon]} alt={skill.name} className="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
             </div>
-            <span className="text-sm font-medium text-center">{skill.name}</span>
+            <span className="text-xs sm:text-sm font-medium text-center">{skill.name}</span>
           </div>
         ))}
       </motion.div>
@@ -126,33 +126,33 @@ export const SkillsSection = () => {
   );
 
   return (
-    <section id="skills" className="py-28 px-4 bg-background relative overflow-hidden">
+    <section id="skills" className="py-14 sm:py-20 md:py-28 px-4 bg-background relative overflow-hidden">
       <div className="container mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-center mb-20"
+          className="text-center mb-10 sm:mb-16 md:mb-20"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium mb-5">
             <span>⚙️</span> Tech Stack
           </div>
-          <h2 className="text-5xl md:text-6xl font-black mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4">
             <span className="text-foreground">My </span>
             <span style={{ background: "linear-gradient(135deg, hsl(185,100%,52%), hsl(268,75%,62%))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Skills</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+          <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base md:text-lg">
             Technologies I work with daily — from frontend to backend to cloud.
           </p>
         </motion.div>
 
-        <div className="flex flex-wrap justify-center gap-3 mb-16">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12 md:mb-16">
           {categories.map((category) => (
             <motion.button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
-              className={`px-6 py-2.5 rounded-full font-medium border border-transparent hover:shadow-lg ${
+              className={`px-3 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium border border-transparent hover:shadow-lg ${
                 activeCategory === category.id
                   ? `${category.color} text-white shadow-md`
                   : "bg-secondary/50 text-foreground hover:bg-secondary/70"
@@ -179,9 +179,9 @@ export const SkillsSection = () => {
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.4 }}
                   whileHover={{ y: -4, boxShadow: "0 12px 40px hsl(185,100%,52%/0.12)" }}
-                  className="bg-card p-6 rounded-2xl border border-border hover:border-primary/40 transition-all duration-300 group"
+                  className="bg-card p-4 sm:p-6 rounded-2xl border border-border hover:border-primary/40 transition-all duration-300 group"
                 >
-                  <div className="flex items-start gap-4 mb-5">
+                  <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-5">
                     <div className="w-12 h-12 rounded-full bg-card border-2 border-primary/50 flex items-center justify-center">
                       <img src={iconImages[skill.icon]} alt={skill.name} className="w-6 h-6 object-contain" />
                     </div>

@@ -6,8 +6,6 @@ import {
   Send,
   Github,
   Linkedin,
-  Twitter,
-  Instagram,
   CheckCircle,
   Loader2,
   MessageCircle,
@@ -18,7 +16,8 @@ import { useState } from "react";
 // ── EmailJS config ─────────────────────────────────────────────────
 const EMAILJS_SERVICE_ID  = "service_b70fq7o";
 const EMAILJS_TEMPLATE_ID = "template_kuojgfn";
-const EMAILJS_PUBLIC_KEY  = "T4IVeiG_NuN1_P4Jc";
+const EMAILJS_PUBLIC_KEY  = "uwV8MPI3c5-uwdmvn";
+emailjs.init(EMAILJS_PUBLIC_KEY);
 // ──────────────────────────────────────────────────────────────────
 
 const contactInfo = [
@@ -51,8 +50,6 @@ const contactInfo = [
 const socials = [
   { icon: Github,   href: "https://github.com/ARSLAN-choudary",               label: "GitHub",    color: "hover:text-white hover:bg-gray-800" },
   { icon: Linkedin, href: "https://www.linkedin.com/in/arslan-aslam-557511324/", label: "LinkedIn",  color: "hover:text-white hover:bg-blue-600" },
-  { icon: Twitter,  href: "#",                                                   label: "Twitter",   color: "hover:text-white hover:bg-sky-500" },
-  { icon: Instagram,href: "#",                                                   label: "Instagram", color: "hover:text-white hover:bg-pink-600" },
 ];
 
 export const ContactSection = () => {
@@ -78,21 +75,21 @@ export const ContactSection = () => {
           title: formData.title || "No Subject",
           message: formData.message,
           time: new Date().toLocaleString("en-PK", { dateStyle: "medium", timeStyle: "short" }),
-        },
-        EMAILJS_PUBLIC_KEY
+        }
       );
       setStatus("success");
       setFormData({ name: "", email: "", title: "", message: "" });
       setTimeout(() => setStatus("idle"), 4000);
     } catch (err) {
-      console.error("EmailJS error:", err);
+      console.error("EmailJS error:", err?.text || err?.message || err);
+      alert("EmailJS Error: " + (err?.text || err?.message || JSON.stringify(err)));
       setStatus("error");
       setTimeout(() => setStatus("idle"), 4000);
     }
   };
 
   return (
-    <section id="contact" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-background">
+    <section id="contact" className="py-14 sm:py-20 px-3 sm:px-6 relative overflow-hidden bg-background">
       {/* subtle grid bg */}
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:60px_60px] opacity-30" />
       {/* gradient blobs – small, cheap */}
@@ -101,11 +98,11 @@ export const ContactSection = () => {
 
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-8 sm:mb-14">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
             <MessageCircle className="h-4 w-4" /> Let's Connect
           </span>
-          <h2 className="text-4xl sm:text-5xl font-bold mb-3">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3">
             Get In{" "}
             <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
               Touch
@@ -116,14 +113,14 @@ export const ContactSection = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 sm:gap-8">
           {/* ── Left panel ── */}
           <div className="lg:col-span-2 flex flex-col gap-5">
             {/* Contact info cards */}
             {contactInfo.map(({ icon: Icon, label, value, href, color, bg }) => (
               <div
                 key={label}
-                className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-card/60 backdrop-blur-sm hover:border-primary/40 transition-colors duration-200"
+                className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-2xl border border-border bg-card/60 backdrop-blur-sm hover:border-primary/40 transition-colors duration-200"
               >
                 <div className={`p-3 rounded-xl ${bg} flex-shrink-0`}>
                   <Icon className={`h-5 w-5 ${color}`} />
@@ -131,11 +128,11 @@ export const ContactSection = () => {
                 <div>
                   <p className="text-xs text-muted-foreground">{label}</p>
                   {href ? (
-                    <a href={href} className="font-medium text-sm hover:text-primary transition-colors">
+                    <a href={href} className="font-medium text-xs sm:text-sm hover:text-primary transition-colors break-all">
                       {value}
                     </a>
                   ) : (
-                    <p className="font-medium text-sm">{value}</p>
+                    <p className="font-medium text-xs sm:text-sm">{value}</p>
                   )}
                 </div>
               </div>
@@ -176,7 +173,7 @@ export const ContactSection = () => {
 
           {/* ── Right panel: Form ── */}
           <div className="lg:col-span-3">
-            <div className="relative p-6 sm:p-8 rounded-2xl border border-border bg-card/60 backdrop-blur-sm">
+            <div className="relative p-4 sm:p-6 md:p-8 rounded-2xl border border-border bg-card/60 backdrop-blur-sm">
               {/* top accent line */}
               <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
@@ -191,7 +188,7 @@ export const ContactSection = () => {
                   </p>
                 </div>
               ) : (
-                <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-5">
                   {/* hidden time field — matches {{time}} in EmailJS template */}
                   <input type="hidden" name="time" value={new Date().toLocaleString("en-PK", { dateStyle: "medium", timeStyle: "short" })} />
                   <div className="grid sm:grid-cols-2 gap-5">

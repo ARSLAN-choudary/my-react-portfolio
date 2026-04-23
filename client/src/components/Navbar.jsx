@@ -102,7 +102,7 @@ export const Navbar = () => {
     <>
       {/* ── Top-right pill (social + music + theme) ── */}
       <motion.div
-        className="fixed top-4 right-4 z-50 flex items-center gap-1.5 px-3 py-2 rounded-2xl border border-border bg-card/80 backdrop-blur-xl shadow-lg"
+        className="fixed top-3 right-2 sm:top-4 sm:right-4 z-50 flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-2xl border border-border bg-card/80 backdrop-blur-xl shadow-lg"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
@@ -158,7 +158,7 @@ export const Navbar = () => {
             exit={{ y: 80, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            <div className="flex items-center gap-1 px-3 py-2 rounded-2xl border border-border bg-card/80 backdrop-blur-xl shadow-xl shadow-black/40">
+            <div className="flex items-center gap-0.5 sm:gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-2xl border border-border bg-card/80 backdrop-blur-xl shadow-xl shadow-black/40">
               {navItems.map((item) => {
                 const active = activeSection === item.href;
                 return (
@@ -167,7 +167,7 @@ export const Navbar = () => {
                     href={item.href}
                     aria-label={item.name}
                     className={cn(
-                      "relative flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-200",
+                      "relative flex flex-col items-center gap-0.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl transition-all duration-200",
                       active
                         ? "text-primary-foreground"
                         : "text-muted-foreground hover:text-primary hover:bg-primary/10"

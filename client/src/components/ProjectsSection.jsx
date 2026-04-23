@@ -1,4 +1,4 @@
-import { Github, ExternalLink, Sparkles, X, ArrowUpRight } from "lucide-react";
+import { Github, Sparkles, ArrowUpRight, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -12,6 +12,7 @@ const projects = [
     image: "/projects/betever.png",
     tags: ["Angular", "Tailwind CSS", "TypeScript", "RxJS"],
     githubUrl: "https://github.com/Aoun-Javaid/beteverb2b",
+    liveUrl: "https://betever365.com/home",
     color: "from-red-600 to-rose-700",
     glow: "rgba(239,68,68,0.3)",
   },
@@ -23,6 +24,7 @@ const projects = [
     image: "/projects/d247.png",
     tags: ["Angular", "Tailwind CSS", "TypeScript", "NgRx"],
     githubUrl: "https://github.com/connectwithfalco/d247-web-ag-b2b",
+    liveUrl: "https://d247.com/",
     color: "from-rose-600 to-pink-700",
     glow: "rgba(244,63,94,0.3)",
   },
@@ -34,6 +36,7 @@ const projects = [
     image: "/projects/tigerexch.png",
     tags: ["Angular", "Tailwind CSS", "TypeScript", "Socket.IO"],
     githubUrl: null,
+    liveUrl: "https://tigerxplay.vip/",
     color: "from-orange-600 to-amber-700",
     glow: "rgba(234,88,12,0.3)",
   },
@@ -45,6 +48,7 @@ const projects = [
     image: "/projects/playbro.com.png",
     tags: ["Angular", "Tailwind CSS", "SCSS", "RxJS"],
     githubUrl: null,
+    liveUrl: "https://www.playbro.live/",
     color: "from-yellow-600 to-orange-700",
     glow: "rgba(202,138,4,0.3)",
   },
@@ -56,6 +60,7 @@ const projects = [
     image: "/projects/blaclane.png",
     tags: ["React", "Next.js", "Tailwind CSS", "Google Maps", "Stripe"],
     githubUrl: "https://github.com/ARSLAN-choudary/blacklane",
+    liveUrl: "https://www.blacklane.com/en/",
     color: "from-zinc-600 to-slate-800",
     glow: "rgba(113,113,122,0.3)",
   },
@@ -67,6 +72,7 @@ const projects = [
     image: "/projects/wolt.png",
     tags: ["React", "Node.js", "MongoDB", "Mapbox"],
     githubUrl: null,
+    liveUrl: "https://wolt.com/en/discovery",
     color: "from-sky-600 to-blue-700",
     glow: "rgba(2,132,199,0.3)",
   },
@@ -78,6 +84,7 @@ const projects = [
     image: "/projects/inited.png",
     tags: ["Angular", "Tailwind CSS", "TypeScript", "Node.js"],
     githubUrl: "https://github.com/asjadBuilds/united-motors",
+    liveUrl: "https://utdmotors.com/",
     color: "from-slate-600 to-gray-800",
     glow: "rgba(100,116,139,0.3)",
   },
@@ -89,6 +96,7 @@ const projects = [
     image: "/projects/kcre.png",
     tags: ["React", "TypeScript", "Chart.js", "Tailwind CSS"],
     githubUrl: null,
+    liveUrl: null,
     color: "from-blue-600 to-indigo-700",
     glow: "rgba(37,99,235,0.3)",
   },
@@ -100,6 +108,7 @@ const projects = [
     image: "/projects/lush.png",
     tags: ["React", "Tailwind CSS", "Node.js", "MongoDB", "Chart.js"],
     githubUrl: "https://github.com/fahadkhan1229/Lushspaces-adminpanel",
+    liveUrl: "https://lushspaces.ae/",
     color: "from-emerald-600 to-teal-700",
     glow: "rgba(5,150,105,0.3)",
   },
@@ -111,6 +120,7 @@ const projects = [
     image: "/projects/qutham.png",
     tags: ["React", "Framer Motion", "Tailwind CSS", "EmailJS"],
     githubUrl: "https://github.com/ARSLAN-choudary/qutham-portfolio",
+    liveUrl: "https://qutham.com/",
     color: "from-violet-600 to-purple-700",
     glow: "rgba(124,58,237,0.3)",
   },
@@ -122,6 +132,7 @@ const projects = [
     image: "/projects/zameen.png",
     tags: ["React", "Next.js", "Tailwind CSS", "Google Maps"],
     githubUrl: "https://github.com/ARSLAN-choudary/property-site",
+    liveUrl: "https://www.zameen.com/",
     color: "from-teal-600 to-cyan-700",
     glow: "rgba(13,148,136,0.3)",
   },
@@ -150,8 +161,9 @@ const ProjectCard = ({ project, index }) => {
       onMouseLeave={() => setHovered(false)}
     >
       <div
-        className="relative rounded-2xl overflow-hidden border border-border h-64 md:h-72 cursor-pointer group"
+        className="relative rounded-2xl overflow-hidden border border-border h-48 sm:h-56 md:h-64 lg:h-72 cursor-pointer group"
         style={{ boxShadow: hovered ? `0 0 40px ${project.glow}` : "none", transition: "box-shadow 0.4s ease" }}
+        onClick={() => project.liveUrl && window.open(project.liveUrl, "_blank", "noopener,noreferrer")}
       >
         {/* image */}
         <motion.img
@@ -171,18 +183,31 @@ const ProjectCard = ({ project, index }) => {
           {project.category}
         </div>
 
-        {/* github chip top-right */}
-        {project.githubUrl && (
-          <a
-            href={project.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="absolute top-3 right-3 p-2 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-white hover:bg-white/20 transition-all"
-          >
-            <Github size={14} />
-          </a>
-        )}
+        {/* top-right buttons */}
+        <div className="absolute top-3 right-3 flex gap-2">
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="p-2 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-white hover:bg-primary/30 hover:border-primary/40 transition-all"
+            >
+              <ExternalLink size={14} />
+            </a>
+          )}
+          {project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="p-2 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-white hover:bg-white/20 transition-all"
+            >
+              <Github size={14} />
+            </a>
+          )}
+        </div>
 
         {/* bottom info — always visible title, slide-up desc */}
         <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -228,7 +253,7 @@ export const ProjectsSection = () => {
     : projects.filter((p) => p.category === activeFilter);
 
   return (
-    <section id="projects" className="relative py-24 px-4 sm:px-6 overflow-hidden">
+    <section id="projects" className="relative py-14 sm:py-20 md:py-24 px-4 sm:px-6 overflow-hidden">
 
       {/* unique diagonal bg stripe */}
       <div className="absolute inset-0 -z-20 overflow-hidden pointer-events-none">
@@ -259,7 +284,7 @@ export const ProjectsSection = () => {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium mb-4">
               <Sparkles className="h-4 w-4" /> Selected Work
             </div>
-            <h2 className="text-5xl sm:text-6xl font-black leading-none">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black leading-none">
               <span className="text-foreground block">My</span>
               <span
                 className="block"
@@ -319,7 +344,7 @@ export const ProjectsSection = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-5"
+            className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-5"
           >
             {filtered.map((project, i) => (
               <ProjectCard key={project.id} project={project} index={i} />
@@ -329,7 +354,7 @@ export const ProjectsSection = () => {
 
         {/* ── CTA ── */}
         <motion.div
-          className="mt-20 relative overflow-hidden rounded-3xl border border-border p-10 md:p-14 text-center"
+          className="mt-12 sm:mt-20 relative overflow-hidden rounded-3xl border border-border p-6 sm:p-10 md:p-14 text-center"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -341,7 +366,7 @@ export const ProjectsSection = () => {
           />
           <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
-          <h3 className="text-3xl md:text-4xl font-black mb-3 text-foreground">Like what you see?</h3>
+          <h3 className="text-2xl sm:text-3xl md:text-4xl font-black mb-3 text-foreground">Like what you see?</h3>
           <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
             I'm always open to new challenges. Let's build something remarkable together.
           </p>

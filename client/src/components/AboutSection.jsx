@@ -64,30 +64,30 @@ export const AboutSection = () => {
       <div className="container mx-auto max-w-7xl">
         {/* header */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
           initial="hidden" whileInView="show" viewport={{ once: true }} variants={{ show: { transition: { staggerChildren: 0.1 } } }}
         >
           <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium mb-5">
             <Sparkles className="h-4 w-4" /> About Me
           </motion.div>
-          <motion.h2 variants={fadeUp} className="text-4xl sm:text-5xl md:text-6xl font-black mb-4">
+          <motion.h2 variants={fadeUp} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4">
             <span className="text-foreground">Transforming </span>
             <span style={{ background: "linear-gradient(135deg, hsl(185,100%,52%), hsl(268,75%,62%))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               Ideas Into Reality
             </span>
           </motion.h2>
-          <motion.p variants={fadeUp} className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <motion.p variants={fadeUp} className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
             Building digital experiences that combine <span className="text-primary font-semibold">innovation</span>, <span className="text-primary font-semibold">performance</span>, and <span className="text-primary font-semibold">elegance</span>.
           </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 sm:gap-8">
           {/* ── Left (profile + tabs) ── */}
           <div className="xl:col-span-2 space-y-6">
             {/* profile card */}
             <motion.div
               initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-              className="relative rounded-2xl border border-border bg-card p-6 sm:p-8 overflow-hidden"
+              className="relative rounded-2xl border border-border bg-card p-4 sm:p-6 md:p-8 overflow-hidden"
             >
               {/* top gradient line */}
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
@@ -95,7 +95,7 @@ export const AboutSection = () => {
               <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
                 {/* avatar */}
                 <div className="relative flex-shrink-0">
-                  <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden border-2 border-primary/30 shadow-xl shadow-primary/10">
+                  <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-primary/30 shadow-xl shadow-primary/10">
                     <img src="/my-img.jpg" alt="Arslan" className="w-full h-full object-cover" />
                   </div>
                   <div className="absolute -bottom-2 -right-2 w-7 h-7 bg-emerald-500 rounded-full border-2 border-background flex items-center justify-center">
@@ -105,11 +105,11 @@ export const AboutSection = () => {
 
                 {/* name + stats */}
                 <div className="flex-1 text-center md:text-left">
-                  <h3 className="text-2xl sm:text-3xl font-bold mb-0.5">Arslan Aslam</h3>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-0.5">Arslan Aslam</h3>
                   <p className="text-primary font-semibold mb-4">Full Stack Developer</p>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     {stats.map(({ number, label, icon: Icon, suffix = "" }) => (
-                      <div key={label} className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 border border-border hover:border-primary/30 transition-colors">
+                      <div key={label} className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl bg-muted/50 border border-border hover:border-primary/30 transition-colors">
                         <Icon className="h-4 w-4 text-primary flex-shrink-0" />
                         <div>
                           <div className="font-bold text-sm">{number}{suffix}</div>
@@ -156,7 +156,7 @@ export const AboutSection = () => {
             {/* tech stack */}
             <motion.div
               initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}
-              className="rounded-2xl border border-border bg-card p-6 sm:p-8"
+              className="rounded-2xl border border-border bg-card p-4 sm:p-6 md:p-8"
             >
               <h3 className="text-lg font-bold mb-5 flex items-center gap-2">
                 <Code className="h-5 w-5 text-primary" /> Tech Stack

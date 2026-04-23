@@ -15,7 +15,7 @@ export const TestimonialSection = () => {
       id: 1,
       name: "Alex Johnson",
       role: "Product Director at TechCorp",
-      content: `Working with Sahil was seamless from day one. Not only did they deliver a full-stack solution ahead of schedule, but they also communicated clearly throughout the project. It's rare to find a developer who understands both the tech and the business side so well`,
+      content: `Working with Arslan was seamless from day one. Not only did he deliver a full-stack solution ahead of schedule, but he also communicated clearly throughout the project. It's rare to find a developer who understands both the tech and the business side so well`,
       rating: 5,
       image: "/testimonials/alex-johnson.png"
     },
@@ -31,7 +31,7 @@ export const TestimonialSection = () => {
       id: 3,
       name: "David Wilson",
       role: "CTO at Startup Ventures",
-      content: `From wireframes to deployment, Sahil owned the entire stack with confidence and creativity. The final product is fast, reliable, and looks incredible. I wouldn't hesitate to work with them again.`,
+      content: `From wireframes to deployment, Arslan owned the entire stack with confidence and creativity. The final product is fast, reliable, and looks incredible. I wouldn't hesitate to work with him again.`,
       rating: 5,
       image: "/testimonials/David Wilson.png"
     },
@@ -156,13 +156,13 @@ export const TestimonialSection = () => {
               <Star className="h-3 w-3 sm:h-4 sm:w-4" />
             </motion.div>
             <motion.h2
-              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight"
               variants={itemVariants}
             >
               What People Say
             </motion.h2>
             <motion.p
-              className="text-base sm:text-lg text-muted-foreground mt-3 sm:mt-4 max-w-2xl mx-auto"
+              className="text-sm sm:text-base md:text-lg text-muted-foreground mt-2 sm:mt-3 md:mt-4 max-w-2xl mx-auto"
               variants={itemVariants}
             >
               What Clients Will Say About Working with Me.
@@ -170,18 +170,18 @@ export const TestimonialSection = () => {
           </motion.div>
 
           <div className="relative">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {visibleTestimonials.map((testimonial) => (
                 <motion.div
                   key={testimonial.id}
-                  className="bg-background/80 backdrop-blur-sm border rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all h-full flex flex-col group"
+                  className="bg-background/80 backdrop-blur-sm border rounded-xl p-4 sm:p-6 md:p-8 shadow-sm hover:shadow-md transition-all h-full flex flex-col group"
                   variants={itemVariants}
                   whileHover={{ y: -5 }}
                 >
                   <div className="flex flex-col h-full">
                     <Quote className="h-6 w-6 sm:h-8 sm:w-8 text-primary/30 mb-3 sm:mb-4 group-hover:text-primary/50 transition-colors" />
 
-                    <p className="text-base sm:text-lg text-muted-foreground mb-4 sm:mb-6 flex-1">
+                    <p className="text-sm sm:text-base md:text-lg text-muted-foreground mb-3 sm:mb-4 md:mb-6 flex-1">
                       "{testimonial.content}"
                     </p>
 

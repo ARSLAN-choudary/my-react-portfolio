@@ -1,11 +1,9 @@
-import { ArrowUp, Github, Linkedin, Instagram, Mail, Phone, MapPin, Code2 } from "lucide-react";
+import { ArrowUp, Github, Linkedin, Phone, MapPin, Code2, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 
 const socials = [
   { icon: Github,    href: "https://github.com/ARSLAN-choudary",                 label: "GitHub" },
   { icon: Linkedin,  href: "https://www.linkedin.com/in/arslan-aslam-557511324/", label: "LinkedIn" },
-  { icon: Instagram, href: "#",                                                    label: "Instagram" },
-  { icon: Mail,      href: "mailto:arslanchoudary23@gmail.com",                   label: "Email" },
 ];
 
 const navLinks = [
@@ -32,8 +30,8 @@ export const Footer = () => {
       {/* bg orb */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-primary/5 blur-[80px] pointer-events-none" />
 
-      <div className="container max-w-6xl mx-auto px-4 sm:px-6 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      <div className="container max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-10 mb-8 sm:mb-12">
 
           {/* brand */}
           <div className="lg:col-span-1 space-y-4">
@@ -122,7 +120,7 @@ export const Footer = () => {
         </div>
 
         {/* bottom bar */}
-        <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="pt-6 sm:pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
           <p className="text-xs text-muted-foreground">
             © {year} <span className="text-foreground font-semibold">Arslan</span>. All rights reserved.
           </p>

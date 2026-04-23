@@ -1,6 +1,6 @@
 import { ArrowRight, Download, Mail, Github, Linkedin, Shield, TrendingUp, Award, Zap, ChevronDown } from "lucide-react";
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 
 /* ── Typewriter titles ─────────────────────────────────────────── */
 const TITLES = ["Full-Stack Engineer", "React Developer", "Node.js Expert", "UI/UX Specialist"];
@@ -74,18 +74,9 @@ const fadeSlideLeft = {
 };
 
 export const HeroSection = () => {
-  const sectionRef = useRef(null);
   const [titleIdx, setTitleIdx] = useState(0);
   const [displayed, setDisplayed] = useState("");
   const [deleting, setDeleting] = useState(false);
-
-  /* scroll-driven parallax */
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
-  const rawY       = useTransform(scrollYProgress, [0, 1], [0, -120]);
-  const rawScale   = useTransform(scrollYProgress, [0, 0.6], [1, 0.92]);
-  const rawOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
-  const springY    = useSpring(rawY,    { stiffness: 80, damping: 20 });
-  const springOp   = useSpring(rawOpacity, { stiffness: 80, damping: 20 });
 
   /* typewriter */
   useEffect(() => {
@@ -111,7 +102,7 @@ export const HeroSection = () => {
   const handleResume = () => window.open("/arslan-resume.pdf", "_blank", "noopener,noreferrer");
 
   return (
-    <section ref={sectionRef} id="hero" className="relative min-h-screen flex flex-col overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex flex-col overflow-hidden">
 
       {/* ── layered background ── */}
       <div className="absolute inset-0 -z-20">
@@ -133,12 +124,11 @@ export const HeroSection = () => {
       <Orb className="w-[200px] h-[200px] bg-primary/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" delay={4} />
 
       {/* ── parallax wrapper for main content ── */}
-      <motion.div
-        style={{ y: springY, opacity: springOp, scale: rawScale }}
-        className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 pt-24 pb-8"
+      <div
+        className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-6 sm:pb-8"
       >
         <div className="container max-w-6xl mx-auto w-full">
-          <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
+          <div className="flex flex-col lg:flex-row items-center gap-8 sm:gap-14 lg:gap-20">
 
             {/* ══ LEFT TEXT ══ */}
             <motion.div
@@ -149,7 +139,7 @@ export const HeroSection = () => {
             >
               {/* badge */}
               <motion.div variants={fadeSlideUp}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium mb-6"
+                className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs sm:text-sm font-medium mb-4 sm:mb-6"
               >
                 <motion.span
                   animate={{ scale: [1, 1.4, 1], opacity: [1, 0.4, 1] }}
@@ -161,7 +151,7 @@ export const HeroSection = () => {
 
               {/* big name */}
               <motion.div variants={fadeSlideUp} className="mb-3">
-                <h1 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter leading-none">
+                <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter leading-none">
                   <motion.span
                     className="block text-foreground"
                     initial={{ clipPath: "inset(0 100% 0 0)" }}
@@ -191,7 +181,7 @@ export const HeroSection = () => {
               <motion.div variants={fadeSlideUp}
                 className="h-8 flex items-center justify-center lg:justify-start gap-1 mb-5"
               >
-                <span className="text-lg sm:text-xl font-semibold text-muted-foreground">{displayed}</span>
+                <span className="text-sm sm:text-lg md:text-xl font-semibold text-muted-foreground">{displayed}</span>
                 <motion.span
                   animate={{ opacity: [1, 0] }}
                   transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
@@ -201,7 +191,7 @@ export const HeroSection = () => {
 
               {/* description */}
               <motion.p variants={fadeSlideUp}
-                className="text-muted-foreground text-base sm:text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 mb-8"
+                className="text-muted-foreground text-sm sm:text-base md:text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 mb-6 sm:mb-8"
               >
                 I craft{" "}
                 <span className="text-foreground font-semibold">high-performance web apps</span>{" "}
@@ -209,12 +199,12 @@ export const HeroSection = () => {
               </motion.p>
 
               {/* CTA buttons */}
-              <motion.div variants={fadeSlideUp} className="flex flex-wrap gap-3 justify-center lg:justify-start mb-8">
+              <motion.div variants={fadeSlideUp} className="flex flex-wrap gap-2 sm:gap-3 justify-center lg:justify-start mb-6 sm:mb-8">
                 <motion.a
                   href="#projects"
                   whileHover={{ scale: 1.05, boxShadow: "0 0 30px hsl(185,100%,52%/0.45)" }}
                   whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl font-bold text-sm text-black transition-all"
+                  className="inline-flex items-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 rounded-2xl font-bold text-xs sm:text-sm text-black transition-all"
                   style={{ background: "linear-gradient(135deg, hsl(185,100%,52%), hsl(268,75%,62%))" }}
                 >
                   View Projects <ArrowRight className="h-4 w-4" />
@@ -224,7 +214,7 @@ export const HeroSection = () => {
                   href="#contact"
                   whileHover={{ scale: 1.05, borderColor: "hsl(185,100%,52%)", backgroundColor: "hsl(185,100%,52%/0.08)" }}
                   whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl font-bold text-sm border border-border text-muted-foreground transition-all duration-300"
+                  className="inline-flex items-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 rounded-2xl font-bold text-xs sm:text-sm border border-border text-muted-foreground transition-all duration-300"
                 >
                   <Mail className="h-4 w-4" /> Hire Me
                 </motion.a>
@@ -233,14 +223,14 @@ export const HeroSection = () => {
                   onClick={handleResume}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl font-bold text-sm border border-border text-muted-foreground hover:text-foreground transition-all duration-300"
+                  className="inline-flex items-center gap-2 px-4 sm:px-5 py-3 sm:py-3.5 rounded-2xl font-bold text-xs sm:text-sm border border-border text-muted-foreground hover:text-foreground transition-all duration-300"
                 >
                   <Download className="h-4 w-4" />
                 </motion.button>
               </motion.div>
 
               {/* socials */}
-              <motion.div variants={fadeSlideUp} className="flex items-center gap-3 justify-center lg:justify-start">
+              <motion.div variants={fadeSlideUp} className="flex flex-wrap items-center gap-2 sm:gap-3 justify-center lg:justify-start">
                 {socials.map(({ icon: Icon, href, label }, i) => (
                   <motion.a
                     key={label} href={href} aria-label={label}
@@ -250,15 +240,15 @@ export const HeroSection = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 + i * 0.1 }}
-                    className="p-2.5 rounded-xl border border-border text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors duration-200"
+                    className="p-2 sm:p-2.5 rounded-xl border border-border text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors duration-200"
                   >
                     <Icon className="h-4 w-4" />
                   </motion.a>
                 ))}
-                <div className="h-px w-8 bg-border" />
+                <div className="h-px w-6 sm:w-8 bg-border hidden sm:block" />
                 <motion.span
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}
-                  className="text-xs text-muted-foreground"
+                  className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block"
                 >
                   arslanchoudary23@gmail.com
                 </motion.span>
@@ -270,7 +260,7 @@ export const HeroSection = () => {
               variants={fadeSlideLeft}
               initial="hidden"
               animate="show"
-              className="flex-1 flex justify-center lg:justify-end w-full max-w-md"
+              className="flex-1 flex justify-center lg:justify-end w-full max-w-sm sm:max-w-md"
             >
               <motion.div
                 whileHover={{ rotateY: -6, rotateX: 4, scale: 1.02 }}
@@ -302,7 +292,7 @@ export const HeroSection = () => {
                   </div>
 
                   {/* code lines — animate in one by one */}
-                  <div className="p-6 font-mono text-sm text-left space-y-1">
+                  <div className="p-3 sm:p-6 font-mono text-xs sm:text-sm text-left space-y-1">
                     {[
                       <><span className="text-purple-400">const </span><span className="text-cyan-400">developer</span><span className="text-muted-foreground"> = {"{"}</span></>,
                       <><span className="text-muted-foreground pl-4">  </span><span className="text-blue-400">name</span><span className="text-muted-foreground">: </span><span className="text-amber-400">'Arslan Aslam'</span><span className="text-muted-foreground">,</span></>,
@@ -367,7 +357,7 @@ export const HeroSection = () => {
 
           {/* ══ STATS BAR ══ */}
           <motion.div
-            className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4"
+            className="mt-10 sm:mt-16 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4"
             initial="hidden"
             animate="show"
             variants={{ show: { transition: { staggerChildren: 0.1, delayChildren: 0.9 } } }}
@@ -380,7 +370,7 @@ export const HeroSection = () => {
                   show:   { opacity: 1, y: 0,  scale: 1, transition: { duration: 0.5, ease: "backOut" } },
                 }}
                 whileHover={{ y: -4, scale: 1.03 }}
-                className="flex flex-col items-center gap-1.5 p-5 rounded-2xl border border-border bg-card/50 hover:border-primary/40 hover:bg-card transition-all duration-200 group cursor-default"
+                className="flex flex-col items-center gap-1.5 p-3 sm:p-5 rounded-2xl border border-border bg-card/50 hover:border-primary/40 hover:bg-card transition-all duration-200 group cursor-default"
               >
                 <Icon className="h-4 w-4 text-primary mb-1 group-hover:scale-110 transition-transform duration-200" />
                 <div className="text-2xl font-black text-foreground">{number}</div>
@@ -389,7 +379,7 @@ export const HeroSection = () => {
             ))}
           </motion.div>
         </div>
-      </motion.div>
+      </div>
 
       {/* ══ MARQUEE STRIP ══ */}
       <div className="w-full border-t border-border py-4 bg-card/30 backdrop-blur-sm overflow-hidden">
