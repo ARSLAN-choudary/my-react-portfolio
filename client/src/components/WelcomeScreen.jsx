@@ -28,7 +28,7 @@ const WelcomeScreen = ({ onWelcomeComplete }) => {
   };
 
   const currentColors = colors[theme] || colors.dark;
-  const portfolioUrl = "www.devlyhub.in";
+  const portfolioUrl = "";
   const welcomeMessages = [
     "Crafting digital experiences",
     "Software Engineer",
@@ -36,13 +36,13 @@ const WelcomeScreen = ({ onWelcomeComplete }) => {
   ];
 
   useEffect(() => {
-    const phase1 = setTimeout(() => setPhase(1), 800);
-    const phase2 = setTimeout(() => setPhase(2), 1600);
-    const phase3 = setTimeout(() => setPhase(3), 2400);
+    const phase1 = setTimeout(() => setPhase(1), 300);
+    const phase2 = setTimeout(() => setPhase(2), 600);
+    const phase3 = setTimeout(() => setPhase(3), 900);
     const complete = setTimeout(() => {
       setExitAnimation(true);
-      setTimeout(onWelcomeComplete, 1000);
-    }, 5000);
+      setTimeout(onWelcomeComplete, 500);
+    }, 2000);
 
     return () => {
       clearTimeout(phase1);
@@ -62,7 +62,7 @@ const WelcomeScreen = ({ onWelcomeComplete }) => {
         } else {
           clearInterval(typingInterval);
         }
-      }, 40);
+      }, 20);
 
       return () => clearInterval(typingInterval);
     }
@@ -73,15 +73,15 @@ const WelcomeScreen = ({ onWelcomeComplete }) => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.3
+        staggerChildren: 0.08,
+        delayChildren: 0.1
       }
     },
     exit: {
       y: "-100vh",
       opacity: 0,
       transition: {
-        duration: 1,
+        duration: 0.5,
         ease: [0.16, 1, 0.3, 1]
       }
     }
@@ -93,7 +93,7 @@ const WelcomeScreen = ({ onWelcomeComplete }) => {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.8,
+        duration: 0.4,
         ease: [0.16, 1, 0.3, 1]
       }
     }
@@ -104,8 +104,8 @@ const WelcomeScreen = ({ onWelcomeComplete }) => {
     visible: {
       scaleX: 1,
       transition: {
-        delay: 0.8,
-        duration: 0.6,
+        delay: 0.3,
+        duration: 0.3,
         ease: [0.16, 1, 0.3, 1]
       }
     }
@@ -211,33 +211,18 @@ const WelcomeScreen = ({ onWelcomeComplete }) => {
             )}
 
             {phase >= 2 && (
-              <motion.div 
+              <motion.div
                 className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto leading-relaxed font-light"
                 style={{ color: currentColors.muted }}
                 variants={contentVariants}
               >
-                <motion.div 
-                  className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg font-mono flex justify-center items-center"
-                  style={{ color: currentColors.link }}
-                >
-                  {typedText}
-                  {phase >= 2 && (
-                    <motion.span 
-                      className="ml-0.5 h-4 sm:h-5 md:h-6 w-0.5 sm:w-1 inline-block"
-                      style={{ backgroundColor: currentColors.link }}
-                      variants={cursorVariants}
-                      animate="blinking"
-                    />
-                  )}
-                </motion.div>
-                <motion.p 
+                <motion.p
                   className="mt-2 sm:mt-4 text-xs sm:text-sm md:text-base"
                   style={{ color: currentColors.muted }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 1.5 }}
                 >
-                  (This is my portfolio website)
+                  Welcome to my portfolio
                 </motion.p>
               </motion.div>
             )}
